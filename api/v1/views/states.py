@@ -45,9 +45,25 @@ class StateAPI(MethodView):
 
         return state.to_dict()
 
+    def delete(self, state_id):
+        """Deletes a State
+        """
+        empty_dict = {}
+        print("Entre al delete")
+
+        try:
+            json_states = storage.get(State, state_id)
+            storage.delete(json_states)
+            storage.save()
+            return jsonify(empty_dict), 200
+        except Exception:
+            abort(404)
+
+
 
 state_view = StateAPI.as_view('state_api')
 app_views.add_url_rule('/states/', defaults={'state_id': None},
                        view_func=state_view, methods=['GET'])
 app_views.add_url_rule('/states/<state_id>', view_func=state_view,
-                       methods=['GET'])
+                       methods=['GET', 'DELETE'])
+
