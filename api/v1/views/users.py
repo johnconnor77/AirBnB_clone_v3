@@ -71,14 +71,11 @@ class UserAPI(MethodView):
         if not req_data:
             abort(400, 'Not a JSON')
 
-        key = User.__name__ + "." + user_id
-        all_users = storage.all(User)
-        user_update = all_users.get(key)
+        user_update = storage.get(User, user_id)
 
         if user_update is None:
             abort(404)
 
-        user_update.email = req_data.get('email')
         user_update.password = req_data.get('password')
         storage.save()
         return jsonify(user_update.to_dict()), 200
