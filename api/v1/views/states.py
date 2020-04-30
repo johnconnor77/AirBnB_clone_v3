@@ -95,7 +95,9 @@ class StateAPI(MethodView):
 
 state_view = StateAPI.as_view('state_api')
 app_views.add_url_rule('/states/', defaults={'state_id': None},
-                       view_func=state_view, methods=['GET'])
-app_views.add_url_rule('/states/', view_func=state_view, methods=['POST'])
+                       view_func=state_view, methods=['GET'],
+                       strict_slashes=False)
+app_views.add_url_rule('/states/', view_func=state_view, methods=['POST'],
+                       strict_slashes=False)
 app_views.add_url_rule('/states/<state_id>', view_func=state_view,
-                       methods=['GET', 'PUT', 'DELETE'])
+                       methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
