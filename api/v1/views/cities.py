@@ -14,8 +14,8 @@ class CityAPI(MethodView):
     """
 
     def get(self, state_id=None, city_id=None):
-        """Retrieves the list of all State objects
-        or a single State object
+        """Retrieves the list of all City objects
+        or a single City object
         """
         if state_id:
             return jsonify(self.get_cities(state_id)), 200
