@@ -56,8 +56,7 @@ class StateAPI(MethodView):
         if 'name' not in req_data:
             abort(400, 'Missing name')
 
-        state = State()
-        state.name = req_data.get('name')
+        state = State(**req_data)
         state.save()
         return jsonify(state.to_dict()), 201
 
@@ -77,7 +76,7 @@ class StateAPI(MethodView):
             abort(404)
 
         state_update.name = req_data.get('name')
-        state_update.save()
+        storage.save()
         return jsonify(state_update.to_dict()), 200
 
     def delete(self, state_id):
