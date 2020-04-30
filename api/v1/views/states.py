@@ -46,7 +46,7 @@ class StateAPI(MethodView):
         return state.to_dict()
 
     def post(self):
-        """Creates a State
+        """ Creates a State
         """
         req_data = request.get_json()
 
@@ -68,9 +68,7 @@ class StateAPI(MethodView):
         if not req_data:
             abort(400, 'Not a JSON')
 
-        key = State.__name__ + "." + state_id
-        all_states = storage.all(State)
-        state_update = all_states.get(key)
+        state_update = storage.get(State, state_id)
 
         if state_update is None:
             abort(404)
@@ -98,3 +96,5 @@ app_views.add_url_rule('/states/', defaults={'state_id': None},
                        strict_slashes=False)
 app_views.add_url_rule('/states/', view_func=state_view, methods=['POST'],
                        strict_slashes=False)
+app_views.add_url_rule('/states/<state_id>', view_func=state_view,
+                       methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
