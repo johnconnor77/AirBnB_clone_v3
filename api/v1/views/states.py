@@ -84,7 +84,7 @@ class StateAPI(MethodView):
         """
         json_states = storage.get(State, state_id)
 
-        if json_amenities is None:
+        if json_states is None:
             abort(404)
 
         storage.delete(json_states)
