@@ -89,7 +89,7 @@ class StateAPI(MethodView):
 
         storage.delete(json_states)
         storage.save()
-        return jsonify(empty_dict), 200
+        return jsonify({}), 200
 
 
 state_view = StateAPI.as_view('state_api')
