@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """States module
 """
-from flask import abort, jsonify
+from flask import abort, jsonify, request
 from flask.views import MethodView
 from api.v1.views import app_views
 from models import storage
@@ -59,11 +59,31 @@ class StateAPI(MethodView):
         except Exception:
             abort(404)
 
+    def put(self, state_id):
+        """Update a State
+        """
+        print("Entre al put")
+        req_data = request.get_json()
+
+        if not req_data:
+            abort(400, 'Not a JSON')
+
+        print("Put entra")
+        key = State.__name__ + "." + state_id
+        print(key)
+        all_states = storage.all(State)
+        state_update = all_states.get(key)
+
+        if state_update is None:
+            abort(404)
+
+        state_update.name = req_data['name']
+        state_update.save()
+        return jsonify(state_update.to_dict()), 200
 
 
 state_view = StateAPI.as_view('state_api')
 app_views.add_url_rule('/states/', defaults={'state_id': None},
                        view_func=state_view, methods=['GET'])
 app_views.add_url_rule('/states/<state_id>', view_func=state_view,
-                       methods=['GET', 'DELETE'])
-
+                       methods=['GET', 'PUT', 'DELETE'])
