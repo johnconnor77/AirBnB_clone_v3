@@ -78,7 +78,8 @@ class UserAPI(MethodView):
         if user_update is None:
             abort(404)
 
-        user_update.name = req_data.get('name')
+        user_update.email = req_data.get('email')
+        user_update.password = req_data.get('password')
         storage.save()
         return jsonify(user_update.to_dict()), 200
 
