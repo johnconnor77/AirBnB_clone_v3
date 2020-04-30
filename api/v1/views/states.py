@@ -17,9 +17,9 @@ class StateAPI(MethodView):
         or a single State object
         """
         if state_id:
-            return jsonify(self.get_state(state_id))
+            return jsonify(self.get_state(state_id)), 200
 
-        return jsonify(self.get_states())
+        return jsonify(self.get_states()), 200
 
     def get_states(self):
         """Retrieves the list of all State objects
@@ -92,6 +92,7 @@ class StateAPI(MethodView):
             return jsonify(empty_dict), 200
         except Exception:
             abort(404)
+
 
 state_view = StateAPI.as_view('state_api')
 app_views.add_url_rule('/states/', defaults={'state_id': None},
