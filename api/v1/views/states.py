@@ -64,22 +64,19 @@ class StateAPI(MethodView):
     def put(self, state_id):
         """Update a State
         """
-        print("Entre al put")
         req_data = request.get_json()
 
         if not req_data:
             abort(400, 'Not a JSON')
 
-        print("Put entra")
         key = State.__name__ + "." + state_id
-        print(key)
         all_states = storage.all(State)
         state_update = all_states.get(key)
 
         if state_update is None:
             abort(404)
 
-        state_update.name = req_data['name']
+        state_update.name = req_data.get('name')
         state_update.save()
         return jsonify(state_update.to_dict()), 200
 
@@ -87,7 +84,6 @@ class StateAPI(MethodView):
         """Deletes a State
         """
         empty_dict = {}
-        print("Entre al delete")
 
         try:
             json_states = storage.get(State, state_id)
@@ -96,7 +92,6 @@ class StateAPI(MethodView):
             return jsonify(empty_dict), 200
         except Exception:
             abort(404)
-
 
 state_view = StateAPI.as_view('state_api')
 app_views.add_url_rule('/states/', defaults={'state_id': None},
