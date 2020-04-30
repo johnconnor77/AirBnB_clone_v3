@@ -53,15 +53,68 @@ class CityAPI(MethodView):
             city = all_cities.get(key).to_dict()
 
             return city
-        
+
+    def post(self, state_id):
+        """ Creates a new City
+        """
+        req_data = request.get_json()
+
+        is_state = storage.get(State, state_id)
+
+        if is_state is None:
+            abort(404)
+
+        if not req_data:
+            abort(400, 'Not a JSON')
+
+        if 'name' not in req_data:
+            abort(400, 'Missing name')
+
+        city = City(**req_data)
+        city.state_id = state_id
+        city.save()
+        return jsonify(city.to_dict()), 201
+
+    def put(self, city_id):
+        """Update a City
+        """
+        req_data = request.get_json()
+
+        if not req_data:
+            abort(400, 'Not a JSON')
+
+        city_update = storage.get(City, city_id)
+
+        if city_update is None:
+            abort(404)
+
+        city_update.name = req_data.get('name')
+        storage.save()
+        return jsonify(city_update.to_dict()), 200
+
+    def delete(self, city_id):
+        """Deletes a City
+        """
+        json_cities = storage.get(City, city_id)
+
+        if json_cities is None:
+            abort(404)
+
+        storage.delete(json_cities)
+        storage.save()
+        return jsonify({}), 200
+
 
 city_view = CityAPI.as_view('city_api')
 
 app_views.add_url_rule('/states/<state_id>/cities',
                        view_func=city_view, methods=['GET'],
                        strict_slashes=False)
-
+app_views.add_url_rule('/states/<state_id>/cities', view_func=city_view,
+                       methods=['POST'], strict_slashes=False)
 app_views.add_url_rule('/cities/<city_id>', view_func=city_view,
-                       methods=['GET'], strict_slashes=False)
+                       methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+
+
 
 
