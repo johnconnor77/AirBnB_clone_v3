@@ -114,7 +114,3 @@ app_views.add_url_rule('/states/<state_id>/cities', view_func=city_view,
                        methods=['POST'], strict_slashes=False)
 app_views.add_url_rule('/cities/<city_id>', view_func=city_view,
                        methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
-
-
-
-
