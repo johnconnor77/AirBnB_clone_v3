@@ -98,5 +98,3 @@ app_views.add_url_rule('/states/', defaults={'state_id': None},
                        strict_slashes=False)
 app_views.add_url_rule('/states/', view_func=state_view, methods=['POST'],
                        strict_slashes=False)
-app_views.add_url_rule('/states/<state_id>', view_func=state_view,
-                       methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
