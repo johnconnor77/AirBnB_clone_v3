@@ -46,7 +46,7 @@ class StateAPI(MethodView):
         return state.to_dict()
 
     def post(self):
-        """Creates a State
+        """ Creates a State
         """
         req_data = request.get_json()
 
@@ -68,9 +68,7 @@ class StateAPI(MethodView):
         if not req_data:
             abort(400, 'Not a JSON')
 
-        key = State.__name__ + "." + state_id
-        all_states = storage.all(State)
-        state_update = all_states.get(key)
+        state_update = storage.get(State, state_id)
 
         if state_update is None:
             abort(404)
@@ -82,15 +80,14 @@ class StateAPI(MethodView):
     def delete(self, state_id):
         """Deletes a State
         """
-        empty_dict = {}
+        json_states = storage.get(State, state_id)
 
-        try:
-            json_states = storage.get(State, state_id)
-            storage.delete(json_states)
-            storage.save()
-            return jsonify(empty_dict), 200
-        except Exception:
+        if json_states is None:
             abort(404)
+
+        storage.delete(json_states)
+        storage.save()
+        return jsonify({}), 200
 
 
 state_view = StateAPI.as_view('state_api')
