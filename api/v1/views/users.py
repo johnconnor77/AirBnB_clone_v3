@@ -76,9 +76,19 @@ class UserAPI(MethodView):
         if user_update is None:
             abort(404)
 
-        user_update.first_name = req_data.get('first_name')
-        user_update.last_name = req_data.get('last_name')
-        user_update.password = req_data.get('password')
+        req_first_name = req_data.get('first_name')
+        req_last_name = req_data.get('last_name')
+        req_password = req_data.get('password')
+
+        if req_first_name is not None:
+            user_update.first_name = req_first_name
+
+        if req_last_name is not None:
+            user_update.last_name = req_last_name
+
+        if req_password is not None:
+            user_update.password = req_password
+
         user_update.save()
         return jsonify(user_update.to_dict()), 200
 
