@@ -79,7 +79,7 @@ class UserAPI(MethodView):
         user_update.first_name = req_data.get('first_name')
         user_update.last_name = req_data.get('last_name')
         user_update.password = req_data.get('password')
-        storage.save()
+        user_update.save()
         return jsonify(user_update.to_dict()), 200
 
     def delete(self, user_id):
