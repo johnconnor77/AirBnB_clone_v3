@@ -106,8 +106,11 @@ class ReviewAPI(MethodView):
         """Update a Review
         """
         review = storage.get(Review, review_id)
-        req = self.check_request_format(request)
 
+        if review is None:
+            abort(404)
+
+        req = self.check_request_format(request)
         req_text = req.get('text')
 
         if req_text is not None:
